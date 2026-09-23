@@ -1,0 +1,1244 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How a Support Case Begins — Part 1</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700&amp;family=Lato:wght@400;700;900&amp;display=swap">
+<style>
+body{margin:0;font-family:'Lato',system-ui,sans-serif;background:#0E1B2E;color:#0B2545}
+a{color:#1466F0}a:hover{color:#0B4FC0}
+.stage *{box-sizing:border-box}
+.disp{font-family:'Lexend','Lato',sans-serif}
+.paused,.paused *{animation-play-state:paused !important}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes up{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fromL{from{opacity:0;transform:translateX(-36px)}to{opacity:1;transform:none}}
+@keyframes fromR{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}70%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes zoomIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@keyframes win{0%{opacity:0;transform:translateY(14px)}12%{opacity:1;transform:none}86%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-10px)}}
+@keyframes dim{to{opacity:.32;filter:grayscale(1)}}
+@keyframes dimSoft{to{opacity:.18}}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(20,102,240,.45),0 18px 40px rgba(11,37,69,.14)}50%{box-shadow:0 0 0 16px rgba(20,102,240,0),0 18px 40px rgba(11,37,69,.14)}}
+@keyframes warnPulse{0%,100%{box-shadow:0 0 0 0 rgba(234,88,12,.55)}50%{box-shadow:0 0 0 12px rgba(234,88,12,0)}}
+@keyframes press{0%,100%{transform:scale(1)}50%{transform:scale(.94)}}
+@keyframes typeIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes hi{0%{background:rgba(20,102,240,.12)}88%{background:rgba(20,102,240,.12)}100%{background:rgba(20,102,240,0)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes ping{0%{opacity:.8;transform:scale(.4)}100%{opacity:0;transform:scale(2.4)}}
+@keyframes fly{0%{transform:translate(0,0) rotate(0) scale(1)}50%{transform:translate(340px,-200px) rotate(-6deg) scale(.92)}100%{transform:translate(690px,-50px) rotate(0) scale(.72)}}
+@keyframes swapA{0%,44%{opacity:1}50%,94%{opacity:0}100%{opacity:1}}
+@keyframes swapB{0%,44%{opacity:0}50%,94%{opacity:1}100%{opacity:0}}
+@keyframes stamp{0%{opacity:0;transform:scale(1.7) rotate(-7deg)}60%{opacity:1;transform:scale(.95) rotate(-7deg)}100%{opacity:1;transform:scale(1) rotate(-7deg)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes march{to{stroke-dashoffset:-72}}
+@keyframes cur2b{0%{opacity:0;transform:translate(700px,600px) scale(1)}5.7%{opacity:1;transform:translate(700px,600px) scale(1)}17%{transform:translate(396px,319px) scale(1)}19.5%{transform:translate(396px,319px) scale(.82)}21.5%{transform:translate(396px,319px) scale(1)}32%{transform:translate(480px,339px) scale(1)}34.5%{transform:translate(480px,339px) scale(.82)}36.5%{transform:translate(480px,339px) scale(1)}44%{opacity:1;transform:translate(640px,470px) scale(1)}80%{opacity:1;transform:translate(640px,470px) scale(1)}87%{transform:translate(1000px,526px) scale(1)}88.8%{transform:translate(1000px,526px) scale(.82)}90.5%{transform:translate(1000px,526px) scale(1)}100%{opacity:1;transform:translate(1000px,526px) scale(1)}}
+@keyframes cur7{0%{opacity:0;transform:translate(900px,560px) scale(1)}10%{opacity:1;transform:translate(900px,560px) scale(1)}34%{transform:translate(632px,128px) scale(1)}36.5%{transform:translate(632px,128px) scale(.82)}38.5%{opacity:1;transform:translate(632px,128px) scale(1)}45%{opacity:1;transform:translate(660px,150px) scale(1)}50%{opacity:0;transform:translate(660px,150px) scale(1)}100%{opacity:0;transform:translate(660px,150px) scale(1)}}
+@keyframes cur1{0%,100%{transform:translate(0,0) scale(1)}40%{transform:translate(0,0) scale(.8)}}
+.ctl{height:44px;min-width:44px;padding:0 14px;border-radius:10px;border:1px solid #2A3E5C;background:#15263F;color:#E6EEF8;font-family:'Lato',sans-serif;font-size:14px;font-weight:700;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ctl:hover{background:#1D3354}
+.ctl.main{background:#1466F0;border-color:#1466F0;color:#fff}
+.ctl.main:hover{background:#0B55D0}
+.chip{height:32px;padding:0 10px;border-radius:16px;border:1px solid #2A3E5C;background:transparent;color:#A9B8CC;font-family:'Lato',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}
+.chip:hover{color:#fff;border-color:#4A6488}
+.chip.done{color:#D5E0EE;border-color:#34507A;background:#16304F}
+.chip.on{color:#0B2545;background:#8FD16F;border-color:#8FD16F}
+</style>
+<style>
+html,body{height:100%}
+body{display:flex;align-items:center;justify-content:center;overflow:hidden}
+#fit{width:1280px;height:870px;transform-origin:center center;flex-shrink:0}
+[hidden]{display:none !important}
+.ctl{white-space:nowrap}
+</style>
+</head>
+<body>
+<div id="fit">
+<div style="width: 1280px; height: 870px; background: #0E1B2E; display: flex; flex-direction: column; overflow: hidden;">
+
+<!-- hidden symbol library -->
+<svg width="0" height="0" style="position: absolute; width: 0; height: 0;" aria-hidden="true">
+<defs>
+<symbol id="dc-customer" viewBox="0 0 200 200">
+<path d="M58 88 C52 38 148 38 142 88 L146 124 C132 132 124 116 122 104 L78 104 C76 116 68 132 54 124 Z" fill="#3B2A26"></path>
+<path d="M40 200 C40 150 66 128 100 128 C134 128 160 150 160 200 Z" fill="#23A094"></path>
+<path d="M84 129 L100 152 L116 129 Z" fill="#E6F6F3"></path>
+<rect x="89" y="104" width="22" height="28" rx="8" fill="#E2A77F"></rect>
+<ellipse cx="100" cy="82" rx="32" ry="36" fill="#F1C39E"></ellipse>
+<path d="M66 76 C68 42 132 40 136 78 C118 64 94 60 70 80 Z" fill="#3B2A26"></path>
+<circle cx="88" cy="87" r="3.8" fill="#1F2937"></circle>
+<circle cx="112" cy="87" r="3.8" fill="#1F2937"></circle>
+<circle cx="79" cy="98" r="5.5" fill="#F29A86" opacity=".45"></circle>
+<circle cx="121" cy="98" r="5.5" fill="#F29A86" opacity=".45"></circle>
+<path d="M90 102 Q100 109 110 102" stroke="#A0523D" stroke-width="3" fill="none" stroke-linecap="round"></path>
+</symbol>
+<symbol id="dc-agent" viewBox="0 0 200 200">
+<path d="M40 200 C40 150 66 128 100 128 C134 128 160 150 160 200 Z" fill="#1466F0"></path>
+<path d="M84 129 L100 150 L116 129 Z" fill="#FFFFFF"></path>
+<rect x="89" y="104" width="22" height="28" rx="8" fill="#B97A55"></rect>
+<ellipse cx="68" cy="88" rx="7" ry="10" fill="#C98B63"></ellipse>
+<ellipse cx="132" cy="88" rx="7" ry="10" fill="#C98B63"></ellipse>
+<ellipse cx="100" cy="82" rx="32" ry="36" fill="#D39A72"></ellipse>
+<path d="M67 80 C62 42 138 40 133 80 C126 60 80 58 67 80 Z" fill="#1F1A17"></path>
+<circle cx="88" cy="87" r="3.8" fill="#1F2937"></circle>
+<circle cx="112" cy="87" r="3.8" fill="#1F2937"></circle>
+<path d="M89 101 Q100 109 111 101" stroke="#7A3B2A" stroke-width="3" fill="none" stroke-linecap="round"></path>
+</symbol>
+<symbol id="dc-laptop" viewBox="0 0 160 100">
+<path d="M14 0 H146 L154 90 H6 Z" fill="#8C9AAF"></path>
+<circle cx="80" cy="44" r="11" fill="#B7C3D4"></circle>
+<rect x="0" y="88" width="160" height="10" rx="5" fill="#6E7D93"></rect>
+</symbol>
+<symbol id="dc-monitor" viewBox="0 0 160 110">
+<rect x="0" y="0" width="160" height="92" rx="8" fill="#243B5E"></rect>
+<rect x="68" y="92" width="24" height="12" fill="#3A5277"></rect>
+<rect x="46" y="102" width="68" height="8" rx="4" fill="#3A5277"></rect>
+<circle cx="80" cy="46" r="10" fill="#3F6AA8"></circle>
+</symbol>
+<symbol id="dc-cursor" viewBox="0 0 24 28">
+<path d="M2 2 L2 22 L7.5 16.8 L11.4 25 L14.6 23.5 L10.8 15.4 L18 15.4 Z" fill="#FFFFFF" stroke="#0B2545" stroke-width="1.8" stroke-linejoin="round"></path>
+</symbol>
+<symbol id="dc-check" viewBox="0 0 24 24">
+<circle cx="12" cy="12" r="11" fill="#3E9B2F"></circle>
+<path d="M6.5 12.5 L10.3 16.2 L17.5 8.6" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+</symbol>
+<symbol id="dc-ticket" viewBox="0 0 24 24">
+<path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v3a2 2 0 0 0 0 4v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-3a2 2 0 0 0 0-4z" fill="none" stroke="currentColor" stroke-width="1.8"></path>
+<path d="M9 5v14" stroke="currentColor" stroke-width="1.8" stroke-dasharray="2 2.4"></path>
+</symbol>
+<symbol id="dc-warn" viewBox="0 0 24 24">
+<path d="M12 3 L22 20.5 H2 Z" fill="#F2A93B" stroke="#8A5200" stroke-width="1.4" stroke-linejoin="round"></path>
+<path d="M12 9.5 V14.5" stroke="#5A3500" stroke-width="2.2" stroke-linecap="round"></path>
+<circle cx="12" cy="17.4" r="1.3" fill="#5A3500"></circle>
+</symbol>
+</defs>
+</svg>
+
+<!-- ===================== STAGE ===================== -->
+<div id="stage" class="stage" style="position: relative; width: 1280px; height: 720px; overflow: hidden; background: #F3F6FB; flex-shrink: 0;">
+
+<!-- soft background shapes -->
+<div style="position: absolute; left: -160px; top: -200px; width: 560px; height: 560px; border-radius: 50%; background: #E6EEFA;"></div>
+<div style="position: absolute; right: -120px; bottom: -220px; width: 520px; height: 520px; border-radius: 50%; background: #EAF5E4;"></div>
+
+<!-- top brand line -->
+<div style="position: absolute; left: 28px; top: 14px; display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; color: #3B4F6B; letter-spacing: .02em;">
+<span id="steps" style="display: contents;"></span>
+<span class="disp" style="font-weight: 700; color: #0B2545; font-size: 16px;">MotionPoint Support</span>
+<span style="width: 4px; height: 4px; border-radius: 2px; background: #94A3B8;"></span>
+<span>Case process · Part 1</span>
+</div>
+
+<!-- persistent case chip -->
+<div id="ticket" hidden>
+<div style="position: absolute; right: 32px; top: 14px; height: 40px; padding: 0 16px 0 12px; border-radius: 20px; background: #FFFFFF; box-shadow: 0 4px 14px rgba(11,37,69,.12); display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; color: #0B2545; animation: fromR 1.01s ease both;">
+<svg width="22" height="22" style="color: #1466F0;"><use href="#dc-ticket"></use></svg>
+<span>Case #00012345</span>
+<span style="padding: 3px 10px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 13px;">New</span>
+</div>
+</div>
+
+<!-- ============ SCENE 0 · INTRO ============ -->
+<template id="scene-0">
+<div style="position: absolute; inset: 0;">
+<div style="position: absolute; left: 0; top: 120px; width: 1280px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center;">
+<div style="font-size: 16px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; color: #3E8A2A; animation: up 1.91s 0.64s both;">Customer Support · Animation 1</div>
+<h1 class="disp" style="margin: 0; font-size: 68px; line-height: 1.05; font-weight: 700; color: #0B2545; animation: up 2.21s 1.26s both;">How a Support case begins</h1>
+<p style="margin: 0; font-size: 24px; color: #3B4F6B; max-width: 820px; animation: up 2.21s 2.21s both;">From the moment a customer spots an issue to the moment an SU agent is ready to work.</p>
+</div>
+<div style="position: absolute; left: 290px; top: 380px; width: 700px; height: 220px;">
+<svg width="700" height="220" style="position: absolute; left: 0; top: 0; animation: fadeIn 1.91s 4.74s both;"><path d="M170 120 C 280 60, 420 60, 530 120" stroke="#8DB3F2" stroke-width="4" fill="none" stroke-dasharray="10 14" stroke-linecap="round" style="animation: march 5.06s linear infinite;"></path></svg>
+<svg width="180" height="180" style="position: absolute; left: 0; top: 30px; animation: pop 1.91s 3.16s both;"><use href="#dc-customer"></use></svg>
+<div style="position: absolute; left: 290px; top: 40px; width: 120px; height: 76px; border-radius: 12px; background: #1466F0; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; box-shadow: 0 12px 28px rgba(20,102,240,.35); animation: pop 1.91s 5.68s both;">
+<svg width="30" height="30" style="color: #FFFFFF;"><use href="#dc-ticket"></use></svg>
+<span style="font-size: 13px; font-weight: 900;">Support case</span>
+</div>
+<svg width="180" height="180" style="position: absolute; left: 520px; top: 30px; animation: pop 1.91s 4.42s both;"><use href="#dc-agent"></use></svg>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 1 · ISSUE ============ -->
+<template id="scene-1">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<!-- customer at desk -->
+<div style="position: absolute; left: 90px; top: 190px; width: 280px; height: 300px; animation: fromL 1.42s 0.23s both;">
+<svg width="240" height="240" style="position: absolute; left: 20px; top: 0;"><use href="#dc-customer"></use></svg>
+<svg width="170" height="106" style="position: absolute; left: 55px; top: 168px;"><use href="#dc-laptop"></use></svg>
+<div style="position: absolute; left: 0; top: 270px; width: 280px; height: 18px; border-radius: 9px; background: #C9D3E1;"></div>
+</div>
+<!-- thought bubble -->
+<div style="position: absolute; left: 318px; top: 118px; width: 74px; height: 74px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.14); display: flex; align-items: center; justify-content: center; animation: pop 1.17s 1.64s both;">
+<span class="disp" style="font-size: 44px; font-weight: 700; color: #1466F0; animation: bob 3.75s ease-in-out infinite;">?</span>
+</div>
+<div style="position: absolute; left: 306px; top: 196px; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; box-shadow: 0 4px 10px rgba(11,37,69,.12); animation: pop 0.93s 1.42s both;"></div>
+
+<!-- browser window -->
+<div style="position: absolute; left: 470px; top: 80px; width: 750px; height: 470px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(11,37,69,.16); overflow: hidden; animation: fromR 1.42s 0.47s both;">
+<div style="height: 44px; background: #E9EEF5; display: flex; align-items: center; gap: 8px; padding: 0 16px;">
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #F87171;"></span>
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #FBBF24;"></span>
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #4ADE80;"></span>
+<div style="margin-left: 14px; height: 28px; flex-grow: 1; border-radius: 14px; background: #FFFFFF; display: flex; align-items: center; padding: 0 14px; font-size: 14px; color: #3B4F6B;">es.example.com</div>
+<span style="padding: 4px 10px; border-radius: 10px; background: #0B2545; color: #FFFFFF; font-size: 12px; font-weight: 900;">ES</span>
+</div>
+<div style="position: absolute; left: 0; top: 44px; width: 750px; height: 426px;">
+<div style="height: 54px; display: flex; align-items: center; gap: 24px; padding: 0 30px; border-bottom: 1px solid #EEF2F7; font-size: 14px; color: #3B4F6B; font-weight: 700;">
+<span class="disp" style="color: #0B2545; font-size: 17px;">Tienda</span>
+<span>Inicio</span><span>Productos</span><span>Ayuda</span>
+</div>
+<div class="disp" style="padding: 22px 30px 0; font-size: 28px; font-weight: 600; color: #0B2545;">Bienvenido a nuestra tienda</div>
+
+<!-- example a: untranslated -->
+<div style="position: absolute; left: 30px; top: 120px; width: 690px; height: 280px; animation: win 6.08s 1.17s both;">
+<div style="font-size: 20px; line-height: 1.9; color: #3B4F6B;">Encuentre el plan ideal para usted.</div>
+<div style="display: inline-block; font-size: 22px; line-height: 1.6; font-weight: 700; color: #0B2545; background: #FFE58A; padding: 2px 10px; border-radius: 6px; text-decoration: underline wavy #D9480F; text-underline-offset: 6px;">Get your free quote today!</div>
+<div style="font-size: 20px; line-height: 1.9; color: #3B4F6B;">Compare precios y ahorre en cada compra.</div>
+<div style="margin-top: 22px; display: inline-flex; align-items: center; gap: 10px; padding: 10px 16px; border-radius: 12px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900;">Content not translated</div>
+</div>
+
+<!-- example b: misaligned -->
+<div style="position: absolute; left: 30px; top: 120px; width: 690px; height: 280px; animation: win 6.08s 7.27s both;">
+<div style="position: absolute; left: 0; top: 10px; width: 690px; height: 0; border-top: 2px dashed #E0493C;"></div>
+<div style="position: absolute; left: 0; top: 10px; width: 320px; height: 150px; border-radius: 10px; background: #EEF3FA; padding: 16px; display: flex; flex-direction: column; gap: 10px;">
+<div style="height: 14px; width: 70%; border-radius: 7px; background: #B8C6DA;"></div>
+<div style="height: 10px; width: 90%; border-radius: 5px; background: #D3DCE8;"></div>
+<div style="height: 10px; width: 80%; border-radius: 5px; background: #D3DCE8;"></div>
+</div>
+<div style="position: absolute; left: 300px; top: 44px; width: 340px; height: 150px; border-radius: 10px; background: #FDECEA; border: 2px solid #E0493C; padding: 16px; display: flex; flex-direction: column; gap: 10px; transform: rotate(1.5deg);">
+<div style="height: 14px; width: 70%; border-radius: 7px; background: #F0A8A0;"></div>
+<div style="height: 10px; width: 90%; border-radius: 5px; background: #F6C9C3;"></div>
+<div style="height: 10px; width: 80%; border-radius: 5px; background: #F6C9C3;"></div>
+</div>
+<div style="position: absolute; left: 0; top: 220px; display: inline-flex; padding: 10px 16px; border-radius: 12px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900;">Layout misaligned</div>
+</div>
+
+<!-- example c: broken image / link -->
+<div style="position: absolute; left: 30px; top: 120px; width: 690px; height: 280px; animation: win 6.08s 13.35s both;">
+<div style="display: flex; gap: 30px; align-items: flex-start;">
+<div style="width: 260px; height: 170px; border-radius: 12px; border: 2px dashed #B8C6DA; background: #F6F8FB; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #6B7C93;">
+<svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="#6B7C93" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 16l5-5 4 4"></path><path d="M14 13l2-2 5 5"></path><path d="M4 3l16 18" stroke="#E0493C" stroke-width="2"></path></svg>
+<span style="font-size: 15px; font-weight: 700;">Image failed to load</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 14px; padding-top: 18px;">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 22px; font-weight: 700; color: #1466F0; text-decoration: underline;">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="2" stroke-linecap="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+Ver detalles</div>
+<div style="display: inline-flex; align-self: flex-start; padding: 6px 12px; border-radius: 8px; background: #FDECEA; color: #B42318; font-size: 16px; font-weight: 900;">404 · Page not found</div>
+</div>
+</div>
+<div style="margin-top: 26px; display: inline-flex; padding: 10px 16px; border-radius: 12px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900;">Broken image or link</div>
+</div>
+
+<!-- example d: button not working -->
+<div style="position: absolute; left: 30px; top: 120px; width: 690px; height: 280px; animation: win 6.08s 19.45s both;">
+<div style="position: relative; width: 300px; height: 150px;">
+<div style="position: absolute; left: 20px; top: 30px; width: 220px; height: 60px; border-radius: 12px; background: #1466F0; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 900; animation: press 1.64s 20.63s 2 both;">Continuar</div>
+<svg width="30" height="36" style="position: absolute; left: 170px; top: 64px; animation: cur1 1.64s 20.63s 2 both; transform-origin: 0 0;"><use href="#dc-cursor"></use></svg>
+</div>
+<div style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; color: #B42318; animation: fadeIn 0.93s 22.04s both;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B42318" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+Nothing happens when clicked</div>
+<div style="margin-top: 22px; display: inline-flex; padding: 10px 16px; border-radius: 12px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900;">Button doesn't work</div>
+</div>
+
+<!-- example e: requests -->
+<div style="position: absolute; left: 30px; top: 110px; width: 690px; height: 290px; animation: win 6.08s 25.55s both;">
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px;">
+<div style="height: 170px; border-radius: 14px; background: #EEF3FA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 12px;">
+<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path><path d="M9 13h6M9 17h4"></path></svg>
+<div style="font-size: 17px; font-weight: 900; color: #0B2545;">Offline document translation</div>
+<div style="font-size: 14px; color: #3B4F6B;">brochure.docx → Spanish</div>
+</div>
+<div style="height: 170px; border-radius: 14px; background: #EEF3FA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 12px;">
+<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+<div style="font-size: 17px; font-weight: 900; color: #0B2545;">SSL Certificate installation</div>
+<div style="font-size: 14px; color: #3B4F6B;">Secure the translated site</div>
+</div>
+<div style="height: 170px; border-radius: 14px; background: #EEF3FA; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 12px;">
+<svg width="46" height="46" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="15" r="4"></circle><path d="M11 12l9-9"></path><path d="M17 6l3 3"></path></svg>
+<div style="font-size: 17px; font-weight: 900; color: #0B2545;">CSR generation</div>
+<div style="font-size: 14px; color: #3B4F6B;">Certificate request</div>
+</div>
+</div>
+<div style="margin-top: 22px; display: inline-flex; padding: 10px 16px; border-radius: 12px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900;">Needs MotionPoint's help</div>
+</div>
+
+<!-- converge overlay -->
+<div style="position: absolute; inset: 0; background: rgba(243,246,251,.88); animation: fadeIn 0.93s 31.87s both;"></div>
+</div>
+</div>
+
+<div style="position: absolute; left: 545px; top: 250px; width: 600px; height: 120px; border-radius: 60px; background: #1466F0; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 16px; box-shadow: 0 20px 44px rgba(20,102,240,.4); animation: pop 1.42s 32.35s both;">
+<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"></path><rect x="3" y="14" width="4" height="6" rx="1.5"></rect><rect x="17" y="14" width="4" height="6" rx="1.5"></rect></svg>
+<span class="disp" style="font-size: 30px; font-weight: 700;">Customer needs MotionPoint Support</span>
+</div>
+
+<!-- caption -->
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.17s 0.23s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">The customer notices an issue</div>
+<div style="font-size: 18px; color: #3B4F6B;">Untranslated text, a layout problem, something broken — or a request for help.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 2 · CONTACT OPTIONS ============ -->
+<template id="scene-2">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 70px; top: 190px; width: 280px; height: 300px; animation: fromL 1.32s 0.26s both;">
+<svg width="240" height="240" style="position: absolute; left: 20px; top: 0;"><use href="#dc-customer"></use></svg>
+<svg width="170" height="106" style="position: absolute; left: 55px; top: 168px;"><use href="#dc-laptop"></use></svg>
+<div style="position: absolute; left: 0; top: 270px; width: 280px; height: 18px; border-radius: 9px; background: #C9D3E1;"></div>
+</div>
+
+<!-- portal card -->
+<div style="position: absolute; left: 410px; top: 90px; width: 400px; height: 440px; border-radius: 22px; background: #FFFFFF; border: 3px solid #1466F0; padding: 36px; display: flex; flex-direction: column; gap: 18px; animation: pop 1.32s 0.8s both, glow 3.72s 6.39s infinite;">
+<div style="width: 76px; height: 76px; border-radius: 20px; background: #1466F0; display: flex; align-items: center; justify-content: center;">
+<svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path><path d="M8 14h8M8 17h5"></path></svg>
+</div>
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Option 1</div>
+<div class="disp" style="font-size: 34px; line-height: 1.15; font-weight: 700; color: #0B2545;">Create a case in the MP+ portal</div>
+<div style="font-size: 22px; font-weight: 700; color: #1466F0;">cases.motionpoint.com</div>
+<div style="margin-top: auto; align-self: flex-start; display: flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 14px; background: #5DB645; color: #0B2545; font-size: 17px; font-weight: 900; animation: pop 1.32s 6.9s both;">
+<svg width="20" height="20"><use href="#dc-check"></use></svg>
+Most common · most direct</div>
+</div>
+
+<!-- email card -->
+<div style="position: absolute; left: 850px; top: 90px; width: 380px; height: 208px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 14px 36px rgba(11,37,69,.10); padding: 28px; display: flex; flex-direction: column; gap: 10px; animation: pop 1.32s 1.86s both, dim 1.61s 6.39s forwards;">
+<div style="display: flex; align-items: center; gap: 14px;">
+<div style="width: 54px; height: 54px; border-radius: 16px; background: #E6EEFA; display: flex; align-items: center; justify-content: center;">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
+</div>
+<div style="font-size: 15px; font-weight: 900; color: #3B4F6B; letter-spacing: .08em; text-transform: uppercase;">Option 2 · Email</div>
+</div>
+<div class="disp" style="font-size: 26px; font-weight: 600; color: #0B2545;">support@motionpoint.com</div>
+</div>
+
+<!-- phone card -->
+<div style="position: absolute; left: 850px; top: 322px; width: 380px; height: 208px; border-radius: 22px; background: #FFFFFF; box-shadow: 0 14px 36px rgba(11,37,69,.10); padding: 28px; display: flex; flex-direction: column; gap: 10px; animation: pop 1.32s 2.93s both, dim 1.61s 6.39s forwards;">
+<div style="display: flex; align-items: center; gap: 14px;">
+<div style="width: 54px; height: 54px; border-radius: 16px; background: #E6EEFA; display: flex; align-items: center; justify-content: center;">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"></path></svg>
+</div>
+<div style="font-size: 15px; font-weight: 900; color: #3B4F6B; letter-spacing: .08em; text-transform: uppercase;">Option 3 · Phone</div>
+</div>
+<div class="disp" style="font-size: 30px; font-weight: 600; color: #0B2545;">(954) 421-0890</div>
+</div>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.32s 0.26s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">The customer contacts MotionPoint Support</div>
+<div style="font-size: 18px; color: #3B4F6B;">Three ways in — the MP+ case portal is the most common and direct.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 3 · PORTAL ============ -->
+<template id="scene-3">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 170px; top: 64px; width: 940px; height: 520px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(11,37,69,.16); overflow: hidden; animation: zoomIn 1.25s 0.25s both;">
+<div style="height: 40px; background: #E9EEF5; display: flex; align-items: center; gap: 8px; padding: 0 16px;">
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #F87171;"></span>
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #FBBF24;"></span>
+<span style="width: 11px; height: 11px; border-radius: 6px; background: #4ADE80;"></span>
+<div style="margin-left: 14px; height: 26px; width: 420px; border-radius: 13px; background: #FFFFFF; display: flex; align-items: center; padding: 0 14px; font-size: 14px; font-weight: 700; color: #0B2545;">cases.motionpoint.com</div>
+</div>
+
+<!-- page A: home -->
+<div style="position: absolute; left: 0; top: 40px; width: 940px; height: 480px; background: #FFFFFF; animation: fadeOut 0.87s 6.27s forwards;">
+<div style="height: 110px; background: #F0F0F0; position: relative;">
+<div style="position: absolute; left: 30px; top: 16px; display: flex; align-items: center; gap: 28px; font-size: 13px; color: #1466F0;">
+<span class="disp" style="font-size: 17px; font-weight: 700; color: #1466F0;">Market<span style="color: #3E8A2A;">Fully</span></span>
+<span style="font-weight: 700; text-decoration: underline;">Home</span><span>My Cases</span><span>Invoice Reconciliation</span>
+</div>
+<div class="disp" style="position: absolute; left: 0; top: 50px; width: 940px; text-align: center; font-size: 34px; font-weight: 700; color: #1466F0;">What can we help you with?</div>
+</div>
+<div style="position: absolute; left: 116px; top: 150px; width: 220px; height: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(11,37,69,.14); animation: press 0.75s 5.02s both;">
+<div style="height: 44px; background: #1466F0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Create a Support Case</div>
+<div style="height: 86px; display: flex; align-items: center; justify-content: center;"><svg width="40" height="40" style="color: #1466F0;"><use href="#dc-ticket"></use></svg></div>
+</div>
+<div style="position: absolute; left: 360px; top: 150px; width: 220px; height: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(11,37,69,.10);">
+<div style="height: 44px; background: #1466F0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Profile</div>
+</div>
+<div style="position: absolute; left: 604px; top: 150px; width: 220px; height: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(11,37,69,.10);">
+<div style="height: 44px; background: #1466F0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">FAQ</div>
+</div>
+<div style="position: absolute; left: 238px; top: 300px; width: 220px; height: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(11,37,69,.10);">
+<div style="height: 44px; background: #1466F0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">How To</div>
+</div>
+<div style="position: absolute; left: 482px; top: 300px; width: 220px; height: 130px; border-radius: 14px; overflow: hidden; box-shadow: 0 6px 18px rgba(11,37,69,.10);">
+<div style="height: 44px; background: #1466F0; color: #FFFFFF; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Customer Portal</div>
+</div>
+<div style="position: absolute; left: 106px; top: 140px; width: 240px; height: 150px; border-radius: 18px; border: 3px solid #E0493C; animation: fadeIn 0.75s 3.02s both;"></div>
+</div>
+
+<!-- page B: services -->
+<div style="position: absolute; left: 0; top: 40px; width: 940px; height: 480px; background: #FFFFFF; animation: fadeIn 0.87s 6.51s both, fadeOut 0.87s 10.55s forwards;">
+<div class="disp" style="position: absolute; left: 0; top: 50px; width: 940px; text-align: center; font-size: 34px; font-weight: 600; color: #1466F0;">Which services do you need assistance with?</div>
+<div style="position: absolute; left: 170px; top: 140px; width: 280px; height: 190px; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 22px rgba(11,37,69,.14); animation: press 0.75s 9.03s both;">
+<div style="height: 52px; background: #1466F0; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center;">Web Localization</div>
+<div class="disp" style="height: 138px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #0B2545;">MotionPoint</div>
+</div>
+<div style="position: absolute; left: 490px; top: 140px; width: 280px; height: 190px; border-radius: 18px; overflow: hidden; box-shadow: 0 8px 22px rgba(11,37,69,.10);">
+<div style="height: 52px; background: #1466F0; color: #FFFFFF; font-size: 17px; font-weight: 700; display: flex; align-items: center; justify-content: center;">MarketFully.AI</div>
+<div class="disp" style="height: 138px; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700; color: #1466F0;">Market<span style="color: #3E8A2A;">Fully</span></div>
+</div>
+</div>
+
+<!-- page C: form -->
+<div style="position: absolute; left: 0; top: 40px; width: 940px; height: 480px; background: #FFFFFF; animation: fadeIn 0.87s 10.8s both;">
+<div style="position: absolute; left: 40px; top: 18px; font-size: 20px; font-weight: 900; color: #0B2545;">Create a Support Case</div>
+<div style="position: absolute; left: 40px; top: 64px; width: 420px;">
+<div style="font-size: 13px; font-weight: 700; color: #3B4F6B; margin-bottom: 4px;"><span style="color: #C81E1E;">*</span> Case Subject</div>
+<div style="height: 38px; border: 1px solid #B8C6DA; border-radius: 6px; padding: 0 12px; display: flex; align-items: center; font-size: 15px; color: #0B2545;"><span style="display: inline-block; white-space: nowrap; animation: typeIn 2.77s steps(24) 12.05s both;">Spanish text missing on checkout page</span></div>
+</div>
+<div style="position: absolute; left: 40px; top: 138px; width: 420px;">
+<div style="font-size: 13px; font-weight: 700; color: #3B4F6B; margin-bottom: 4px;"><span style="color: #C81E1E;">*</span> Request/Issue Type</div>
+<div style="height: 38px; border: 1px solid #B8C6DA; border-radius: 6px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; color: #0B2545;"><span style="animation: fadeIn 0.75s 15.31s both;">Translation</span><span style="color: #6B7C93;">▾</span></div>
+</div>
+<div style="position: absolute; left: 40px; top: 212px; width: 420px;">
+<div style="font-size: 13px; font-weight: 700; color: #3B4F6B; margin-bottom: 4px;"><span style="color: #C81E1E;">*</span> Priority</div>
+<div style="height: 38px; border: 1px solid #B8C6DA; border-radius: 6px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; color: #0B2545;"><span>Standard</span><span style="color: #6B7C93;">▾</span></div>
+</div>
+<div style="position: absolute; left: 40px; top: 286px; width: 420px;">
+<div style="font-size: 13px; font-weight: 700; color: #3B4F6B; margin-bottom: 4px;"><span style="color: #C81E1E;">*</span> Business Entity</div>
+<div style="height: 38px; border: 1px solid #B8C6DA; border-radius: 6px; padding: 0 12px; display: flex; align-items: center; justify-content: space-between; font-size: 15px; color: #0B2545;"><span style="animation: fadeIn 0.75s 16.56s both;">example.com</span><span style="color: #6B7C93;">▾</span></div>
+</div>
+<div style="position: absolute; left: 490px; top: 64px; width: 410px;">
+<div style="font-size: 13px; font-weight: 700; color: #3B4F6B; margin-bottom: 4px;"><span style="color: #C81E1E;">*</span> Description of Request/Issue</div>
+<div style="height: 260px; border: 1px solid #B8C6DA; border-radius: 6px; padding: 12px; font-size: 15px; line-height: 1.6; color: #0B2545;">
+<div style="animation: typeIn 2.51s steps(20) 17.82s both;">Spanish text is missing on the</div>
+<div style="animation: typeIn 2s steps(16) 20.08s both;">checkout page. Screenshot attached.</div>
+</div>
+</div>
+<div style="position: absolute; left: 760px; top: 400px; width: 140px; height: 44px; border-radius: 8px; background: #1466F0; color: #FFFFFF; font-size: 16px; font-weight: 900; display: flex; align-items: center; justify-content: center; animation: press 0.75s 23.1s both;">Create Case</div>
+</div>
+
+<!-- toast -->
+<div style="position: absolute; left: 290px; top: 190px; width: 360px; height: 110px; border-radius: 18px; background: #0B2545; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 14px; box-shadow: 0 20px 44px rgba(11,37,69,.35); animation: pop 1.25s 23.85s both;">
+<svg width="36" height="36"><use href="#dc-check"></use></svg>
+<span class="disp" style="font-size: 28px; font-weight: 700;">Case submitted</span>
+</div>
+</div>
+
+<svg width="30" height="36" style="position: absolute; left: 0; top: 0; transform-origin: 0 0; animation: cur2b 26.35s linear both;"><use href="#dc-cursor"></use></svg>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.25s 0.25s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">The customer creates a case in MP+</div>
+<div style="font-size: 18px; color: #3B4F6B;">Create a Support Case → Web Localization → fill in the form → Create Case.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 4 · CASE CREATED ============ -->
+<template id="scene-4">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; inset: 0; animation: dimSoft 1.24s 13.66s forwards;">
+<div style="position: absolute; left: 60px; top: 200px; width: 280px; height: 300px; animation: fromL 1.24s 0.24s both;">
+<svg width="240" height="240" style="position: absolute; left: 20px; top: 0;"><use href="#dc-customer"></use></svg>
+<svg width="170" height="106" style="position: absolute; left: 55px; top: 168px;"><use href="#dc-laptop"></use></svg>
+<div style="position: absolute; left: 0; top: 270px; width: 280px; height: 18px; border-radius: 9px; background: #C9D3E1;"></div>
+<div style="position: absolute; left: 0; top: 300px; width: 280px; text-align: center; font-size: 18px; font-weight: 900; color: #3B4F6B;">Customer · MP+ portal</div>
+</div>
+<svg width="1280" height="720" style="position: absolute; left: 0; top: 0; animation: fadeIn 1.24s 2.98s both;"><path d="M330 330 C 500 110, 800 110, 990 290" stroke="#8DB3F2" stroke-width="4" fill="none" stroke-dasharray="10 14" stroke-linecap="round" style="animation: march 3.47s linear infinite;"></path></svg>
+<div style="position: absolute; left: 940px; top: 200px; width: 280px; height: 300px; animation: fromR 1.24s 0.75s both;">
+<svg width="240" height="240" style="position: absolute; left: 20px; top: 0;"><use href="#dc-agent"></use></svg>
+<svg width="170" height="116" style="position: absolute; left: 55px; top: 162px;"><use href="#dc-monitor"></use></svg>
+<div style="position: absolute; left: 0; top: 270px; width: 280px; height: 18px; border-radius: 9px; background: #C9D3E1;"></div>
+<div style="position: absolute; left: 0; top: 300px; width: 280px; text-align: center; font-size: 18px; font-weight: 900; color: #3B4F6B;">Support · Salesforce</div>
+</div>
+<div style="position: absolute; left: 1010px; top: 150px; width: 140px; height: 140px; border-radius: 50%; border: 4px solid #5DB645; animation: ping 2.23s 9.93s both;"></div>
+</div>
+
+<!-- flying ticket -->
+<div style="position: absolute; left: 250px; top: 300px; width: 200px; height: 104px; border-radius: 14px; background: #1466F0; color: #FFFFFF; padding: 14px 18px; box-shadow: 0 14px 32px rgba(20,102,240,.4); display: flex; flex-direction: column; gap: 4px; animation: pop 1.24s 0.99s both, fly 5.97s cubic-bezier(.5,0,.3,1) 3.98s forwards, fadeOut 0.75s 10.94s forwards;">
+<div style="display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase; opacity: .9;"><svg width="18" height="18" style="color: #FFFFFF;"><use href="#dc-ticket"></use></svg> New case</div>
+<div class="disp" style="font-size: 24px; font-weight: 700;">#00012345</div>
+<div style="font-size: 13px; font-weight: 700;">Translation · Standard</div>
+</div>
+
+<!-- MP+ case screen -->
+<div style="position: absolute; left: 250px; top: 70px; width: 780px; height: 500px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 28px 70px rgba(11,37,69,.22); overflow: hidden; animation: zoomIn 1.24s 13.92s both;">
+<div style="height: 56px; background: #0B2545; color: #FFFFFF; display: flex; align-items: center; gap: 12px; padding: 0 24px;">
+<svg width="24" height="24" style="color: #8FD16F;"><use href="#dc-ticket"></use></svg>
+<span class="disp" style="font-size: 18px; font-weight: 600;">Salesforce · Case Management</span>
+</div>
+<div style="padding: 22px 28px 0;">
+<div style="font-size: 14px; font-weight: 700; color: #3B4F6B;">Case 00012345</div>
+<div class="disp" style="font-size: 26px; font-weight: 600; color: #0B2545;">Spanish text missing on checkout page</div>
+<div style="display: flex; gap: 8px; margin-top: 10px;">
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">Translation</span>
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">Standard</span>
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">New</span>
+</div>
+</div>
+<div style="margin: 20px 28px 0; font-size: 15px; font-weight: 900; color: #3B4F6B;">Warning Comments</div>
+<div style="margin: 8px 28px 0; padding: 14px 18px; border-radius: 12px; background: #C2410C; display: flex; gap: 14px; align-items: flex-start; animation: fromL 1.24s 17.88s both, warnPulse 3.23s 19.13s infinite;">
+<svg width="34" height="34" style="flex-shrink: 0;"><use href="#dc-warn"></use></svg>
+<ul style="margin: 0; padding: 0 0 0 20px; display: flex; flex-direction: column; gap: 4px; color: #FFFFFF; font-size: 17px; line-height: 1.3;">
+<li><strong>WARNING:</strong> Must provide quotes first.</li>
+<li><strong>WARNING:</strong> Do not bill without approval.</li>
+<li><strong>WARNING:</strong> Do not close cases without customer approval.</li>
+</ul>
+</div>
+<div class="disp" style="margin: 16px 28px 0; font-size: 20px; font-weight: 600; color: #0B2545; animation: up 1.24s 20.87s both;">First thing to check on any case: account Warnings.</div>
+<div style="margin: 18px 28px 0; display: flex; gap: 10px;">
+<div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Case Information</div>
+<div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Customer Information</div>
+<div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Description</div>
+</div>
+</div>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.24s 0.24s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">The case is created</div>
+<div style="font-size: 18px; color: #3B4F6B;">It gets a case number and travels from MP+ into our Salesforce case management system.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 5 · CASE INFORMATION ============ -->
+<template id="scene-5">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 60px; top: 70px; width: 640px; height: 530px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 20px 50px rgba(11,37,69,.12); overflow: hidden; animation: fromL 1.19s 0.24s both;">
+<div style="height: 56px; background: #F1F4F9; display: flex; align-items: center; justify-content: space-between; padding: 0 24px;">
+<span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Case Information</span>
+<span style="font-size: 14px; font-weight: 700; color: #3B4F6B;">Salesforce</span>
+</div>
+<div style="padding: 8px 12px; display: flex; flex-direction: column;">
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 1.2s both, hi 4s 1.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Case Number</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">00012345</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 5.2s both, hi 4s 5.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Submitted Priority</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">Standard</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 9.2s both, hi 4s 9.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Priority</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">Standard</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 13.2s both, hi 4s 13.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Start Date</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">9/9/2026 10:45 AM</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 17.2s both, hi 4s 17.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Due Date</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">9/16/2026 10:45 AM</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 21.2s both, hi 4s 21.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Type</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">Translation</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 25.2s both, hi 4s 25.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Status</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">New</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 0.95s 29.2s both, hi 4s 29.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Language</span><span style="font-size: 19px; font-weight: 900; color: #0B2545;">Spanish</span></div>
+<div style="height: 50px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; background: rgba(20,102,240,.12); animation: up 0.95s 33.2s both;"><span style="width: 230px; font-size: 16px; color: #3B4F6B;">Original Case Owner</span><span style="display: flex; align-items: center; gap: 8px; font-size: 19px; font-weight: 900; color: #0B2545;"><span style="width: 28px; height: 28px; border-radius: 14px; background: #1466F0; color: #FFFFFF; font-size: 12px; display: flex; align-items: center; justify-content: center;">LP</span>Leo Pessi · SU</span></div>
+</div>
+</div>
+
+<!-- callouts -->
+<div style="position: absolute; left: 740px; top: 90px; width: 480px; height: 450px;">
+<div style="position: absolute; inset: 0; border-radius: 22px; background: #FFFFFF; box-shadow: 0 20px 50px rgba(11,37,69,.12); animation: fromR 1.19s 0.72s both;"></div>
+
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 1.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Case Number</div>
+<div class="disp" style="font-size: 54px; font-weight: 700; color: #1466F0;">#00012345</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">The case's unique ID — it follows the request through every step.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 5.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Submitted Priority</div>
+<div class="disp" style="font-size: 54px; font-weight: 700; color: #1466F0;">Standard</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">The priority the customer chose when they submitted the case.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 9.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Priority</div>
+<div class="disp" style="font-size: 54px; font-weight: 700; color: #1466F0;">Standard</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">The working priority. Support can adjust it if it was assigned in error.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 13.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Start Date</div>
+<div class="disp" style="font-size: 44px; font-weight: 700; color: #1466F0;">9/9/2026</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">When the case was opened.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 17.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Due Date</div>
+<div class="disp" style="font-size: 44px; font-weight: 700; color: #1466F0;">9/16/2026</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">When the case is due — driven by its priority.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 21.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Type</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;">
+<span style="padding: 8px 14px; border-radius: 12px; background: #EEF3FA; color: #3B4F6B; font-size: 16px; font-weight: 700;">Functionality</span>
+<span style="padding: 8px 14px; border-radius: 12px; background: #1466F0; color: #FFFFFF; font-size: 16px; font-weight: 900;">Translation</span>
+<span style="padding: 8px 14px; border-radius: 12px; background: #EEF3FA; color: #3B4F6B; font-size: 16px; font-weight: 700;">Translation Feedback</span>
+<span style="padding: 8px 14px; border-radius: 12px; background: #EEF3FA; color: #3B4F6B; font-size: 16px; font-weight: 700;">Other request types</span>
+</div>
+<svg width="410" height="44" viewBox="0 0 410 44" style="animation: fadeIn 0.95s 22.4s both;"><path d="M40 2 C 80 30, 180 30, 205 40 M205 2 L205 40 M370 2 C 330 30, 230 30, 205 40" stroke="#8DB3F2" stroke-width="3" fill="none" stroke-linecap="round"></path></svg>
+<div style="align-self: center; padding: 10px 18px; border-radius: 14px; background: #0B2545; color: #FFFFFF; font-size: 18px; font-weight: 900; animation: pop 0.95s 22.8s both;">Same general Support workflow</div>
+<div style="font-size: 18px; line-height: 1.4; color: #0B2545;">Our example is a Translation case.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 25.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Status</div>
+<div class="disp" style="font-size: 54px; font-weight: 700; color: #1466F0;">New</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">Where the case is in the workflow right now.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: win 4s 29.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Language</div>
+<div style="display: flex; gap: 8px;">
+<span style="padding: 8px 14px; border-radius: 12px; background: #EEF3FA; color: #3B4F6B; font-size: 18px; font-weight: 700;">French</span>
+<span style="padding: 8px 14px; border-radius: 12px; background: #1466F0; color: #FFFFFF; font-size: 18px; font-weight: 900;">Spanish</span>
+<span style="padding: 8px 14px; border-radius: 12px; background: #EEF3FA; color: #3B4F6B; font-size: 18px; font-weight: 700;">German</span>
+</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">The customer selects the language affected by the issue.</div>
+</div>
+<div style="position: absolute; left: 36px; top: 40px; width: 410px; display: flex; flex-direction: column; gap: 14px; animation: up 1.19s 33.2s both;">
+<div style="font-size: 16px; font-weight: 900; color: #3E8A2A; letter-spacing: .08em; text-transform: uppercase;">Original Case Owner</div>
+<div style="display: flex; align-items: center; gap: 16px;">
+<svg width="110" height="110" style="border-radius: 55px; background: #E6EEFA;"><use href="#dc-agent"></use></svg>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">Leo Pessi<br><span style="font-size: 20px; color: #1466F0;">SU team</span></div>
+</div>
+<div style="font-size: 22px; line-height: 1.4; color: #0B2545;">Typically the SU team member who will work on the case.</div>
+</div>
+</div>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.19s 0.24s both;">
+<div>
+<div class="disp" style="font-size: 28px; font-weight: 700; color: #0B2545;">Support receives the case</div>
+<div style="font-size: 17px; color: #3B4F6B;">Case Information, one field at a time.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 6 · CUSTOMER INFORMATION ============ -->
+<template id="scene-6">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 60px; top: 80px; width: 660px; height: 410px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 20px 50px rgba(11,37,69,.12); overflow: hidden; animation: fromL 1.26s 0.25s both;">
+<div style="height: 56px; background: #F1F4F9; display: flex; align-items: center; padding: 0 24px;">
+<span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Customer Information</span>
+</div>
+<div style="padding: 10px 12px; display: flex; flex-direction: column; gap: 4px;">
+<div style="height: 62px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 1.01s 1.01s both, hi 2.53s 1.01s both;"><span style="width: 220px; font-size: 16px; color: #3B4F6B;">Account Name</span><span style="font-size: 20px; font-weight: 900; color: #0B2545;">Northwind Retail Co.</span></div>
+<div style="height: 62px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 1.01s 2.79s both, hi 4.05s 2.79s both;"><span style="width: 220px; font-size: 16px; color: #3B4F6B;">Entitlement</span>
+<span style="position: relative; width: 300px; height: 34px;">
+<span style="position: absolute; left: 0; top: 0; padding: 5px 12px; border-radius: 10px; background: #0B2545; color: #FFFFFF; font-size: 17px; font-weight: 900; animation: swapA 7.61s 3.54s infinite both;">Beyond Words 24/7</span>
+<span style="position: absolute; left: 0; top: 0; padding: 5px 12px; border-radius: 10px; background: #E6EEFA; color: #0B4FC0; font-size: 17px; font-weight: 900; animation: swapB 7.61s 3.54s infinite both;">Standard</span>
+</span></div>
+<div style="height: 62px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 1.01s 4.55s both, hi 2.53s 4.55s both;"><span style="width: 220px; font-size: 16px; color: #3B4F6B;">Business Entity</span><span style="display: flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 900; color: #0B2545;"><span style="padding: 4px 10px; border-radius: 8px; background: #5DB645; color: #0B2545; font-size: 14px; font-weight: 900;">Project</span>example.com</span></div>
+<div style="height: 62px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 1.01s 6.32s both, hi 2.53s 6.32s both;"><span style="width: 220px; font-size: 16px; color: #3B4F6B;">Contact Name</span><span style="font-size: 20px; font-weight: 900; color: #0B2545;">Jordan Lee</span></div>
+<div style="height: 62px; border-radius: 10px; padding: 0 14px; display: flex; align-items: center; animation: up 1.01s 8.11s both, hi 2.53s 8.11s both;"><span style="width: 220px; font-size: 16px; color: #3B4F6B;">Contact Phone</span><span style="font-size: 20px; font-weight: 900; color: #0B2545;">(555) 010-2468</span></div>
+</div>
+</div>
+
+<svg width="130" height="130" style="position: absolute; left: 780px; top: 76px; border-radius: 65px; background: #E6EEFA; animation: pop 1.26s 9.63s both;"><use href="#dc-agent"></use></svg>
+<div class="disp" style="position: absolute; left: 930px; top: 108px; width: 300px; font-size: 22px; font-weight: 600; color: #0B2545; animation: fadeIn 1.01s 10.13s both;">The SU agent now knows…</div>
+
+<div style="position: absolute; left: 780px; top: 230px; width: 440px; height: 72px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 14px; padding: 0 20px; animation: fromR 1.16s 10.9s both;">
+<svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg>
+<div><div style="font-size: 20px; font-weight: 900; color: #0B2545;">Who the customer is</div><div style="font-size: 15px; color: #3B4F6B;">Account Name · Contact</div></div>
+</div>
+<div style="position: absolute; left: 780px; top: 318px; width: 440px; height: 72px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 14px; padding: 0 20px; animation: fromR 1.16s 12.66s both;">
+<svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg>
+<div><div style="font-size: 20px; font-weight: 900; color: #0B2545;">Which project is involved</div><div style="font-size: 15px; color: #3B4F6B;">Business Entity = Project</div></div>
+</div>
+<div style="position: absolute; left: 780px; top: 406px; width: 440px; height: 72px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 14px; padding: 0 20px; animation: fromR 1.16s 14.43s both;">
+<svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg>
+<div><div style="font-size: 20px; font-weight: 900; color: #0B2545;">What level of service applies</div><div style="font-size: 15px; color: #3B4F6B;">Entitlement</div></div>
+</div>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.26s 0.25s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">Customer information</div>
+<div style="font-size: 18px; color: #3B4F6B;">Who the customer is, which project, and what level of service applies.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 7 · DESCRIPTION ============ -->
+<template id="scene-7">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 30px; top: 170px; width: 240px; height: 280px; animation: fromL 1.26s 0.25s both;">
+<svg width="200" height="200" style="position: absolute; left: 20px; top: 0;"><use href="#dc-customer"></use></svg>
+<svg width="140" height="88" style="position: absolute; left: 50px; top: 142px;"><use href="#dc-laptop"></use></svg>
+<div style="position: absolute; left: 0; top: 226px; width: 240px; height: 16px; border-radius: 8px; background: #C9D3E1;"></div>
+</div>
+
+<div style="position: absolute; left: 290px; top: 70px; width: 580px; height: 430px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 20px 50px rgba(11,37,69,.12); overflow: hidden; animation: zoomIn 1.26s 0.51s both;">
+<div style="height: 56px; background: #F1F4F9; display: flex; align-items: center; padding: 0 24px;">
+<span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Description</span>
+</div>
+<div style="padding: 18px 22px; display: flex; flex-direction: column; gap: 8px; font-size: 18px; line-height: 1.35; color: #0B2545;">
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #E6EEFA; animation: typeIn 2.53s steps(22) 1.26s both;">Spanish text is missing on our checkout page.</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #E6EEFA; animation: typeIn 2.02s steps(18) 3.54s both;">Please see the attached screenshot.</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #E5F4DE; animation: typeIn 2.53s steps(24) 5.84s both;">Steps: 1. Open page  2. Select button  3. Error appears</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #EEE8FB; animation: typeIn 1.53s steps(12) 8.36s both;">URL: example.com/page</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #FFF1D6; animation: typeIn 1.53s steps(12) 10.13s both;">Username: customer-provided</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #FFF1D6; animation: typeIn 1.53s steps(12) 11.4s both;">Password: customer-provided</div>
+<div style="align-self: flex-start; padding: 4px 8px; border-radius: 6px; background: #DDF3F1; animation: typeIn 2.02s steps(18) 13.17s both;">Note: please check the mobile checkout too.</div>
+</div>
+</div>
+
+<div style="position: absolute; left: 900px; top: 76px; width: 330px; display: flex; flex-direction: column; gap: 12px;">
+<div style="height: 60px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; font-size: 18px; font-weight: 900; color: #0B2545; animation: fromR 1.01s 2.53s both;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #8DB3F2;"></span>Details of the issue or request</div>
+<div style="height: 60px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; font-size: 18px; font-weight: 900; color: #0B2545; animation: fromR 1.01s 7.1s both;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #8FD16F;"></span>Steps to reproduce</div>
+<div style="height: 60px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; font-size: 18px; font-weight: 900; color: #0B2545; animation: fromR 1.01s 9.12s both;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #B9A5EE;"></span>URLs</div>
+<div style="height: 60px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; font-size: 18px; font-weight: 900; color: #0B2545; animation: fromR 1.01s 11.66s both;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #F2C46B;"></span>Credentials, when required</div>
+<div style="height: 60px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; font-size: 18px; font-weight: 900; color: #0B2545; animation: fromR 1.01s 14.71s both;"><span style="width: 18px; height: 18px; border-radius: 5px; background: #7ED3CB;"></span>Other instructions</div>
+</div>
+
+<div style="position: absolute; left: 290px; top: 520px; width: 940px; height: 76px; border-radius: 18px; background: #0B2545; color: #FFFFFF; display: flex; align-items: center; justify-content: center; padding: 0 30px; text-align: center; animation: up 1.26s 17.23s both;">
+<span class="disp" style="font-size: 23px; font-weight: 600;">The Description tells Support what the customer needs — and provides the information needed to investigate.</span>
+</div>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.26s 0.25s both;">
+<div class="disp" style="font-size: 24px; font-weight: 700; color: #0B2545;">The Description</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 8 · FILES ============ -->
+<template id="scene-8">
+<div style="position: absolute; left: 0; top: 72px; width: 1280px; height: 648px;">
+<div style="position: absolute; left: 60px; top: 70px; width: 1160px; height: 100px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 12px 30px rgba(11,37,69,.10); padding: 12px 24px; animation: up 1.22s 0.5s both;">
+<div style="display: flex; align-items: center; gap: 12px;">
+<span style="font-size: 14px; font-weight: 900; color: #3B4F6B;">Related List Quick Links</span>
+<span style="padding: 3px 10px; border-radius: 10px; background: #0B2545; color: #FFFFFF; font-size: 13px; font-weight: 900; animation: pop 0.98s 2.96s both;">Quick links · above the Case details</span>
+</div>
+<div style="margin-top: 10px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0;">
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Work (10)</span>
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Emails (0)</span>
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Case Tracking (10+)</span>
+<span style="font-size: 18px; font-weight: 900; color: #0B2545; background: #FFE58A; border-radius: 8px; padding: 6px 12px; justify-self: start; animation: press 0.74s 10.84s both;">Files (2)</span>
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Customer Updates</span>
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Case History (10+)</span>
+<span style="font-size: 16px; color: #1466F0; text-decoration: underline; padding: 8px 6px;">Case Milestones (3)</span>
+</div>
+</div>
+
+<!-- case details placeholder (below the quick links) -->
+<div style="position: absolute; left: 60px; top: 196px; width: 1160px; height: 300px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 30px rgba(11,37,69,.08); padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; animation: up 1.22s 1.22s both, fadeOut 0.98s 11.34s forwards;">
+<div class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Case Details</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 40px;">
+<div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div><div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div>
+<div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div><div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div>
+<div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div><div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div>
+<div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div><div style="height: 14px; border-radius: 7px; background: #E3E9F2;"></div>
+</div>
+</div>
+<svg width="60" height="40" viewBox="0 0 60 40" style="position: absolute; left: 610px; top: 166px; animation: fadeIn 0.98s 3.44s both, fadeOut 0.74s 11.34s forwards;"><path d="M30 36 V6 M20 16 L30 6 L40 16" stroke="#0B2545" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+
+<!-- files panel -->
+<div style="position: absolute; left: 60px; top: 196px; width: 560px; height: 280px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 20px 50px rgba(11,37,69,.12); overflow: hidden; animation: up 1.22s 11.58s both;">
+<div style="height: 56px; background: #F1F4F9; display: flex; align-items: center; gap: 10px; padding: 0 22px;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0B2545" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"></path></svg>
+<span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Files (2)</span>
+</div>
+<div style="padding: 14px; display: flex; flex-direction: column; gap: 10px;">
+<div style="height: 84px; border-radius: 12px; padding: 0 16px; display: flex; align-items: center; gap: 14px; animation: fromL 0.98s 12.56s both, hi 4.92s 15.52s both;">
+<div style="width: 52px; height: 52px; border-radius: 10px; background: #E6EEFA; display: flex; align-items: center; justify-content: center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><circle cx="9" cy="10" r="2"></circle><path d="M3 18l6-5 4 3 3-2 5 4"></path></svg></div>
+<div style="flex-grow: 1;"><div style="font-size: 19px; font-weight: 900; color: #0B2545;">checkout_screenshot.png</div><div style="font-size: 15px; color: #3B4F6B;">PNG · uploaded by customer</div></div>
+<svg width="30" height="30" style="animation: pop 0.98s 16.75s both;"><use href="#dc-check"></use></svg>
+</div>
+<div style="height: 84px; border-radius: 12px; padding: 0 16px; display: flex; align-items: center; gap: 14px; animation: fromL 0.98s 13.29s both;">
+<div style="width: 52px; height: 52px; border-radius: 10px; background: #E6EEFA; display: flex; align-items: center; justify-content: center;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"></path><path d="M14 3v5h5"></path></svg></div>
+<div style="flex-grow: 1;"><div style="font-size: 19px; font-weight: 900; color: #0B2545;">mobile_checkout.png</div><div style="font-size: 15px; color: #3B4F6B;">PNG · uploaded by customer</div></div>
+</div>
+</div>
+</div>
+
+<!-- description excerpt -->
+<div style="position: absolute; left: 660px; top: 196px; width: 560px; height: 116px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 30px rgba(11,37,69,.10); padding: 18px 22px; animation: fromR 1.22s 14.3s both;">
+<div style="font-size: 14px; font-weight: 900; color: #3B4F6B;">From the Description</div>
+<div style="margin-top: 8px; font-size: 21px; color: #0B2545;">“Please see the <span style="background: #FFE58A; border-radius: 6px; padding: 2px 6px; font-weight: 900;">attached screenshot</span>.”</div>
+</div>
+<svg width="120" height="80" style="position: absolute; left: 560px; top: 250px; animation: fadeIn 0.98s 16.25s both;"><path d="M100 10 C 70 10, 40 30, 6 50" stroke="#3E9B2F" stroke-width="3" fill="none" stroke-dasharray="6 7" stroke-linecap="round"></path></svg>
+
+<!-- checklist -->
+<div style="position: absolute; left: 660px; top: 330px; width: 560px; height: 176px; border-radius: 18px; background: #FFFFFF; box-shadow: 0 12px 30px rgba(11,37,69,.10); padding: 18px 22px; display: flex; flex-direction: column; gap: 12px; animation: fromR 1.22s 17.26s both;">
+<div style="display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 700; color: #0B2545;"><svg width="30" height="30" style="animation: pop 0.98s 18.22s both;"><use href="#dc-check"></use></svg>Files mentioned in Description</div>
+<div style="display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 700; color: #0B2545;"><svg width="30" height="30" style="animation: pop 0.98s 19.71s both;"><use href="#dc-check"></use></svg>Attachments present</div>
+<div style="display: flex; align-items: center; gap: 14px; font-size: 21px; font-weight: 700; color: #0B2545;"><svg width="30" height="30" style="animation: pop 0.98s 21.17s both;"><use href="#dc-check"></use></svg>Information available</div>
+</div>
+
+<div class="disp" style="position: absolute; left: 700px; top: 520px; padding: 12px 26px; border-radius: 14px; border: 4px solid #3E9B2F; color: #2F7A22; background: #F0FAEB; font-size: 32px; font-weight: 700; letter-spacing: .02em; animation: stamp 1.22s 23.16s both;">Information complete</div>
+
+<svg width="30" height="36" style="position: absolute; left: 0; top: 0; transform-origin: 0 0; animation: cur7 29.57s linear both;"><use href="#dc-cursor"></use></svg>
+
+<div style="position: absolute; left: 40px; top: -4px; display: flex; align-items: center; gap: 18px; animation: up 1.22s 0.24s both;">
+<div>
+<div class="disp" style="font-size: 30px; font-weight: 700; color: #0B2545;">Files attached?</div>
+<div style="font-size: 18px; color: #3B4F6B;">Quick links → Files: check that everything mentioned is actually attached.</div>
+</div>
+</div>
+</div>
+</template>
+
+<!-- ============ SCENE 9 · READY ============ -->
+<template id="scene-9">
+<div style="position: absolute; left: 0; top: 24px; width: 1280px; height: 696px;">
+<!-- title -->
+<div style="position: absolute; left: 0; top: 50px; width: 1280px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center;">
+<h2 class="disp" style="margin: 0; font-size: 44px; line-height: 1.1; font-weight: 700; color: #0B2545; animation: up 1.42s 0.47s both;">Support Takes It From Here</h2>
+<div style="font-size: 19px; font-weight: 700; color: #3B4F6B; animation: up 1.42s 1.17s both;">Moving the case forward to the right team</div>
+</div>
+
+<!-- agent -->
+<div style="position: absolute; left: 40px; top: 170px; width: 240px; height: 250px; animation: fromL 1.17s 0.7s both;">
+<svg width="200" height="200" style="position: absolute; left: 20px; top: 0;"><use href="#dc-agent"></use></svg>
+<svg width="140" height="96" style="position: absolute; left: 50px; top: 142px;"><use href="#dc-monitor"></use></svg>
+<div style="position: absolute; left: 0; top: 230px; width: 240px; height: 16px; border-radius: 8px; background: #C9D3E1;"></div>
+</div>
+<div style="position: absolute; left: 30px; top: 122px; height: 50px; padding: 0 16px; border-radius: 25px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.14); display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 900; color: #0B2545; animation: pop 1.07s 5.15s both, fadeOut 0.93s 13.6s forwards;">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1466F0" stroke-width="2.2" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5L21 21"></path></svg>
+Next best course of action?</div>
+
+<!-- case card -->
+<div style="position: absolute; left: 320px; top: 170px; width: 470px; height: 220px; border-radius: 20px; background: #FFFFFF; box-shadow: 0 24px 60px rgba(11,37,69,.16); padding: 22px 26px; display: flex; flex-direction: column; gap: 10px; animation: zoomIn 1.17s 1.42s both;">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 900; color: #3B4F6B;"><svg width="22" height="22" style="color: #1466F0;"><use href="#dc-ticket"></use></svg>Case #00012345</div>
+<div class="disp" style="font-size: 22px; font-weight: 600; color: #0B2545;">Spanish text missing on checkout page</div>
+<div style="display: flex; gap: 8px;">
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">Translation</span>
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">Spanish</span>
+<span style="padding: 4px 12px; border-radius: 12px; background: #E6EEFA; color: #0B4FC0; font-size: 14px; font-weight: 700;">Standard</span>
+</div>
+<div style="margin-top: auto; display: flex; align-items: center; gap: 12px;">
+<span style="padding: 8px 16px; border-radius: 14px; background: #E6EEFA; color: #0B4FC0; font-size: 18px; font-weight: 900; animation: dim 1.17s 3.28s forwards;">New Case</span>
+<svg width="36" height="24" viewBox="0 0 40 24" style="animation: fadeIn 0.7s 3.28s both;"><path d="M2 12h32M26 4l8 8-8 8" stroke="#0B2545" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span style="padding: 8px 16px; border-radius: 14px; background: #3E9B2F; color: #FFFFFF; font-size: 18px; font-weight: 900; animation: pop 1.17s 3.75s both;">Ready for Support</span>
+</div>
+</div>
+
+<!-- documentation note -->
+<div style="position: absolute; left: 610px; top: 150px; width: 240px; padding: 12px 14px; border-radius: 14px; background: #FFF4DE; border: 2px solid #F2A93B; box-shadow: 0 10px 24px rgba(11,37,69,.12); transform: rotate(2deg); animation: pop 1.07s 20.15s both;">
+<div style="font-size: 12px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #6B3E00;">Documented on the case</div>
+<div style="margin-top: 3px; font-size: 14px; line-height: 1.35; color: #4A2E00;">Findings, steps taken, and what the team needs to resolve it.</div>
+</div>
+
+<!-- route to teams -->
+<svg width="170" height="260" viewBox="0 0 170 260" style="position: absolute; left: 790px; top: 150px; animation: fadeIn 0.93s 23.43s both;"><path d="M4 130 C 70 130, 90 130, 160 130" stroke="#3E9B2F" stroke-width="4" fill="none" stroke-dasharray="10 12" stroke-linecap="round" style="animation: march 2.82s linear infinite;"></path><path d="M148 118 L162 130 L148 142" stroke="#3E9B2F" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+
+<!-- teams -->
+<div style="position: absolute; left: 970px; top: 150px; width: 260px; display: flex; flex-direction: column; gap: 8px;">
+<div style="font-size: 14px; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #3B4F6B; animation: fadeIn 0.93s 22.97s both;">Assign to the right team</div>
+<div class="disp" style="height: 50px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; padding: 0 18px; font-size: 22px; font-weight: 700; color: #0B2545; animation: fromR 0.93s 23.9s both, hi 2.34s 26.71s both;">TAM</div>
+<div class="disp" style="height: 50px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; padding: 0 18px; font-size: 22px; font-weight: 700; color: #0B2545; animation: fromR 0.93s 24.37s both, hi 2.34s 28.35s both;">PE</div>
+<div class="disp" style="height: 50px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; padding: 0 18px; font-size: 22px; font-weight: 700; color: #0B2545; animation: fromR 0.93s 24.83s both, hi 2.34s 30s both;">QA</div>
+<div class="disp" style="height: 50px; border-radius: 14px; background: #FFFFFF; box-shadow: 0 8px 22px rgba(11,37,69,.10); display: flex; align-items: center; padding: 0 18px; font-size: 22px; font-weight: 700; color: #0B2545; animation: fromR 0.93s 25.32s both, hi 2.34s 31.65s both;">CXM</div>
+<div style="margin-top: 4px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 900; color: #2F7A22; animation: fadeIn 0.93s 33.29s both;"><svg width="22" height="22"><use href="#dc-check"></use></svg>Assigned with full context</div>
+</div>
+
+<!-- workflow steps -->
+<div style="position: absolute; left: 60px; top: 448px; width: 1160px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px;">
+<div style="height: 78px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; animation: up 1.07s 14.07s both;"><svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg><span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Review</span></div>
+<div style="height: 78px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; animation: up 1.07s 15.93s both;"><svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg><span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Acknowledge</span></div>
+<div style="height: 78px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; animation: up 1.07s 17.82s both;"><svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg><span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545;">Troubleshoot</span></div>
+<div style="height: 78px; border-radius: 16px; background: #FFFFFF; box-shadow: 0 10px 26px rgba(11,37,69,.10); display: flex; align-items: center; gap: 12px; padding: 0 18px; animation: up 1.07s 19.68s both;"><svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg><span class="disp" style="font-size: 20px; font-weight: 600; color: #0B2545; line-height: 1.1;">Document thoroughly</span></div>
+<div style="height: 78px; border-radius: 16px; background: #1466F0; box-shadow: 0 10px 26px rgba(20,102,240,.30); display: flex; align-items: center; gap: 12px; padding: 0 18px; animation: up 1.07s 22.5s both;"><svg width="30" height="30" style="flex-shrink: 0;"><use href="#dc-check"></use></svg><span class="disp" style="font-size: 20px; font-weight: 600; color: #FFFFFF;">Assign</span></div>
+</div>
+
+<div style="position: absolute; left: 0; top: 580px; width: 1280px; text-align: center; font-size: 16px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; color: #3E8A2A; animation: fadeIn 1.17s 35.16s both;">End of Part 1</div>
+</div>
+</template>
+
+<div id="sceneHost" style="position: absolute; inset: 0;"></div>
+<!-- ============ COVER ============ -->
+<div id="cover">
+<div style="position: absolute; inset: 0; background: #0B2545; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center; color: #FFFFFF;">
+<div style="font-size: 16px; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; color: #8FD16F;">MotionPoint Customer Support · Animation 1</div>
+<h1 class="disp" style="margin: 0; font-size: 64px; line-height: 1.05; font-weight: 700;">How a Support case begins</h1>
+<p style="margin: 0; font-size: 22px; color: #C9D6E8; max-width: 760px;">From a customer noticing an issue to an SU agent receiving, reviewing and verifying the case. About four and a half minutes, with background music.</p>
+<button type="button" id="coverPlay" style="margin-top: 14px; height: 72px; padding: 0 40px; border-radius: 36px; border: none; background: #1466F0; color: #FFFFFF; font-family: 'Lexend', sans-serif; font-size: 26px; font-weight: 600; display: flex; align-items: center; gap: 14px; cursor: pointer; box-shadow: 0 16px 40px rgba(20,102,240,.45);">
+<svg width="26" height="26" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="#FFFFFF"></path></svg>Play</button>
+</div>
+</div>
+
+</div>
+
+<!-- ===================== SUBTITLES ===================== -->
+<div style="height: 70px; flex-shrink: 0; background: #0B1626; display: flex; align-items: center; justify-content: center; padding: 0 48px; position: relative; overflow: hidden;">
+<div id="subs" style="display: contents;"></div>
+</div>
+
+<!-- ===================== CONTROLS ===================== -->
+<div style="height: 80px; flex-shrink: 0; background: #0E1B2E; display: flex; flex-direction: column;">
+<div style="height: 6px; background: #1D2E48;"><div id="prog" style="height: 6px; width: 0%; background: #5DB645;"></div></div>
+<div style="flex-grow: 1; display: flex; align-items: center; gap: 10px; padding: 0 20px;">
+<button type="button" class="ctl main" id="playBtn" aria-label="Play">
+<span id="icoPause" style="display: contents;" hidden><svg width="18" height="18" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1" fill="#FFFFFF"></rect><rect x="14" y="4.5" width="4" height="15" rx="1" fill="#FFFFFF"></rect></svg></span>
+<span id="icoPlay" style="display: contents;"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z" fill="#FFFFFF"></path></svg></span>
+<span id="playLabel">Play</span>
+</button>
+<button type="button" class="ctl" id="replayBtn" aria-label="Replay from start">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6EEF8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"></path><path d="M3 4v5h5"></path></svg>
+</button>
+<button type="button" class="ctl" id="musicBtn" aria-label="Music on" aria-pressed="true">
+<span id="icoMusicOn" style="display: contents;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FD16F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle></svg></span>
+<span id="icoMusicOff" style="display: contents;" hidden><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A9B8CC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="17" cy="16" r="3"></circle><path d="M3 3l18 18"></path></svg></span>
+<span id="musicLabel">Music on</span>
+</button>
+<button type="button" class="ctl" id="subsBtn" aria-label="Hide captions" aria-pressed="true">
+<svg width="22" height="18" viewBox="0 0 26 20" fill="none" id="subsIcon" stroke="#8FD16F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1.5" y="1.5" width="23" height="17" rx="3"></rect><path d="M11 8.2a3 3 0 1 0 0 3.6"></path><path d="M19 8.2a3 3 0 1 0 0 3.6"></path></svg>
+</button>
+<button type="button" class="ctl" id="prevBtn" aria-label="Previous scene">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6EEF8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"></path></svg>
+</button>
+<button type="button" class="ctl" id="nextBtn" aria-label="Next scene">
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E6EEF8" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"></path></svg>
+</button>
+<div style="width: 1px; height: 30px; background: #2A3E5C; margin: 0 4px;"></div>
+<div style="display: flex; gap: 6px; flex-grow: 1; overflow: hidden;">
+<span id="chapters" style="display: contents;"></span>
+</div>
+<div style="font-size: 14px; font-weight: 700; color: #A9B8CC; white-space: nowrap; font-variant-numeric: tabular-nums;" id="timeLabel">0:00</div>
+</div>
+</div>
+
+</div>
+</div>
+<script>
+const STEP_HTML = "<div style=\"height: 52px; padding: 0 18px 0 6px; border-radius: 26px; background: #0B2545; color: #FFFFFF; display: flex; align-items: center; gap: 10px; box-shadow: 0 6px 16px rgba(11,37,69,.22); animation: pop 0.78s ease both;\">\n<span class=\"disp\" style=\"width: 40px; height: 40px; border-radius: 20px; background: #5DB645; color: #0B2545; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700;\">{{st.n}}</span>\n<span style=\"font-size: 15px; font-weight: 900; letter-spacing: .06em; text-transform: uppercase;\">Step {{st.n}} of 8</span>\n</div>";
+const SUB_OPEN = "<div style=\"position: absolute; left: 48px; right: 48px; top: 0; height: 70px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 22px; line-height: 1.3; font-weight: 700; color: #F4F7FB; animation: up 0.7s ease both;\">";
+function fit(){ const s = Math.min(window.innerWidth / 1280, window.innerHeight / 870); document.getElementById('fit').style.transform = 'scale(' + s + ')'; }
+window.addEventListener('resize', fit); fit();
+class Player {
+  constructor() {
+    this.state = { scene: 0, el: 0, playing: false, started: false, ended: false, music: true, subsOn: true };
+    this.ctx = null;
+  }
+  durs() { return [14000, 37500, 21200, 26200, 32400, 39200, 25200, 25200, 28500, 37500]; }
+  subLines() {
+    return [
+      [[0, "Here's how a Support case begins."]],
+      [[0, 'A customer spots an issue on their translated site.'], [3749, "Text that isn't translated."], [7264, 'A misaligned layout.'], [13358, 'A broken image or link…'], [19451, "…or a button that won't work."], [25546, 'Or they need help with an offline document translation, SSL Certificate installation, or a CSR generation.'], [32343, 'Either way, they need MotionPoint Support.']],
+      [[0, 'They can email Support, or call us.'], [6379, 'But the most common, and most direct way, is to create a case in the portal, MP+.']],
+      [[0, 'In the MP+ case portal, they choose Create a Support Case,'], [6526, 'pick Web Localization,'], [10792, 'fill in the form,'], [21587, 'and click Create Case.']],
+      [[0, 'The case gets its own number,'], [3975, 'and travels from MP+ into our Support Salesforce case management system.'], [17889, 'The first thing to check for any case: any account warnings.']],
+      [[0, 'Support reviews the Case Information: the case number, priorities, start and due dates,'], [21200, 'the type, the status, and the language the customer selected.'], [33200, 'The Original Case Owner is usually the SU team member who will work the case.']],
+      [[0, 'Customer Information shows who the customer is, which project is involved,'], [10894, 'and what level of service applies — such as Beyond Words 24/7, or Standard.']],
+      [[0, 'The Description explains what the customer needs.'], [5827, 'Details, steps to reproduce, URLs, credentials when required, and any other instructions.']],
+      [[0, 'Next, navigate to the quick links section above the Case details,'], [8867, 'and click on the Files link.'], [14287, 'Make sure everything mentioned in the Description is actually attached.']],
+      [[0, 'Support begins work to determine the next best course of action to take.'], [14061, 'They review, acknowledge, troubleshoot, and thoroughly document the case.'], [22968, 'Then they assign the case to the appropriate team — TAM, PE, QA, or CXM —'], [29530, 'providing the context needed for that team to resolve the case.']]
+    ];
+  }
+  labels() { return ['Intro', 'Issue', 'Contact', 'Portal', 'Case', 'Details', 'Customer', 'Description', 'Files', 'Next step']; }
+
+  /* ---------- original background jazz, synthesized live ---------- */
+  bars() {
+    // [bass walk (MIDI), chord voicing (MIDI)] — ii-V-I in F with turnarounds, 80 bpm swing
+    return [
+      [[43, 46, 50, 47], [58, 62, 65, 69]], // Gm9
+      [[48, 46, 43, 40], [58, 62, 64, 69]], // C13
+      [[41, 45, 48, 49], [57, 60, 64, 67]], // Fmaj9
+      [[50, 48, 45, 44], [54, 60, 64, 69]], // D9
+      [[43, 46, 50, 47], [58, 62, 65, 69]], // Gm9
+      [[48, 46, 43, 40], [58, 62, 64, 69]], // C13
+      [[45, 48, 52, 51], [60, 64, 67, 71]], // Am9
+      [[50, 48, 45, 44], [54, 60, 64, 69]]  // D9
+    ];
+  }
+  hz(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  initAudio() {
+    if (this.ctx) return true;
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return false;
+      const ctx = new AC();
+      const master = ctx.createGain();
+      master.gain.value = 0;
+      const comp = ctx.createDynamicsCompressor();
+      master.connect(ctx.destination);
+      const len = Math.floor(ctx.sampleRate * 1.0);
+      const noise = ctx.createBuffer(1, len, ctx.sampleRate);
+      const data = noise.getChannelData(0);
+      for (let i = 0; i < len; i++) data[i] = Math.random() * 2 - 1;
+      this.ctx = ctx; this.master = master; this.noise = noise;
+      this.beat = 0; this.nextT = 0;
+      return true;
+    } catch (e) { return false; }
+  }
+  melody() {
+    // original sax line: [beat position in bar, MIDI note, length in beats]; .5 = swung offbeat
+    return [
+      [[0, 74, 1.5], [1.5, 77, 0.5], [2, 70, 2]],
+      [[0, 69, 1.5], [1.5, 67, 0.5], [2, 76, 2]],
+      [[0, 69, 3]],
+      [[1, 66, 1], [2, 69, 1], [3, 72, 1]],
+      [[0, 70, 1.5], [1.5, 74, 0.5], [2, 77, 2]],
+      [[0, 76, 1], [1, 74, 1], [2, 70, 2]],
+      [[0, 72, 1.5], [1.5, 71, 0.5], [2, 69, 2]],
+      [[0, 66, 2.5]]
+    ];
+  }
+  saxNote(m, t, dur) {
+    const c = this.ctx;
+    const f0 = this.hz(m);
+    const o = c.createOscillator(); o.type = 'sawtooth';
+    o.frequency.setValueAtTime(f0 * 0.985, t);
+    o.frequency.exponentialRampToValueAtTime(f0, t + 0.07);
+    const o2 = c.createOscillator(); o2.type = 'triangle'; o2.frequency.value = f0;
+    const lfo = c.createOscillator(); lfo.frequency.value = 5.2;
+    const lfoG = c.createGain(); lfoG.gain.setValueAtTime(0, t); lfoG.gain.linearRampToValueAtTime(f0 * 0.006, t + Math.min(0.35, dur * 0.6));
+    lfo.connect(lfoG); lfoG.connect(o.frequency); lfoG.connect(o2.frequency);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.Q.value = 0.8;
+    lp.frequency.setValueAtTime(700, t); lp.frequency.linearRampToValueAtTime(1500, t + 0.12); lp.frequency.linearRampToValueAtTime(1100, t + dur);
+    const g = c.createGain();
+    const end = t + dur;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.075, t + 0.09);
+    g.gain.linearRampToValueAtTime(0.06, t + Math.max(0.1, dur - 0.12));
+    g.gain.exponentialRampToValueAtTime(0.0001, end + 0.18);
+    const g2 = c.createGain(); g2.gain.value = 0.6;
+    o.connect(lp); o2.connect(g2); g2.connect(lp); lp.connect(g); g.connect(this.master);
+    // breath
+    const n = c.createBufferSource(); n.buffer = this.noise;
+    const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f0 * 3; bp.Q.value = 2;
+    const ng = c.createGain(); ng.gain.setValueAtTime(0.0001, t); ng.gain.linearRampToValueAtTime(0.012, t + 0.05); ng.gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+    n.connect(bp); bp.connect(ng); ng.connect(this.master);
+    [o, o2, lfo].forEach((x) => { x.start(t); x.stop(end + 0.25); });
+    n.start(t); n.stop(t + 0.4);
+  }
+  pianoNote(m, t, vel, dur) {
+    const c = this.ctx;
+    const f = this.hz(m);
+    const lp = c.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.setValueAtTime(2600, t); lp.frequency.exponentialRampToValueAtTime(900, t + dur);
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vel, t + 0.006);
+    g.gain.exponentialRampToValueAtTime(vel * 0.3, t + 0.4);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    lp.connect(g); g.connect(this.master);
+    [[1, 1], [2, 0.28], [3, 0.08]].forEach((h) => {
+      const o = c.createOscillator(); o.type = 'sine'; o.frequency.value = f * h[0];
+      const hg = c.createGain(); hg.gain.value = h[1];
+      o.connect(hg); hg.connect(lp);
+      o.start(t); o.stop(t + dur + 0.05);
+    });
+  }
+  pianoChord(notes, t, vel, dur) {
+    notes.forEach((m, i) => this.pianoNote(m, t + i * 0.018, vel, dur));
+  }
+  brush(t, vol, dur) {
+    const c = this.ctx;
+    const s = c.createBufferSource(); s.buffer = this.noise;
+    const bp = c.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 0.7;
+    const g = c.createGain();
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(vol, t + dur * 0.45);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(bp); bp.connect(g); g.connect(this.master);
+    s.start(t); s.stop(t + dur + 0.02);
+  }
+  tap(t, vol, dur, freq) {
+    const c = this.ctx;
+    const s = c.createBufferSource(); s.buffer = this.noise;
+    const f = c.createBiquadFilter(); f.type = 'highpass'; f.frequency.value = freq;
+    const g = c.createGain();
+    g.gain.setValueAtTime(vol, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    s.connect(f); f.connect(g); g.connect(this.master);
+    s.start(t); s.stop(t + dur + 0.02);
+  }
+  scheduleBeat(i, t) {
+    const spb = 60 / 80;
+    const sw = spb * 2 / 3;
+    const barIx = Math.floor(i / 4) % 8;
+    const bar = this.bars()[barIx];
+    const b = i % 4;
+    // soft drums: brush sweep on every beat, light ride taps, soft hi-hat on 2 and 4
+    this.tap(t, 0.014, 0.25, 7500);
+    if (b === 1 || b === 3) {
+      this.tap(t + sw, 0.01, 0.18, 7500);
+      this.tap(t, 0.012, 0.05, 9500);
+    }
+    // soft piano: low root on beat 1, gentle chord comping
+    if (b === 0) {
+      this.pianoNote(bar[0][0] + 12, t, 0.05, 2.4);
+      this.pianoChord(bar[1], t + 0.03, 0.028, 2.2);
+    }
+    const v = Math.floor(i / 4) % 2;
+    if (b === 2 && v === 0) this.pianoChord(bar[1], t + sw, 0.018, 1.2);
+    if (b === 1 && v === 1) this.pianoChord(bar[1], t + sw, 0.018, 1.2);
+  }
+  schedule() {
+    const c = this.ctx;
+    if (!c || c.state !== 'running' || !this.musicLive) return;
+    if (this.nextT < c.currentTime) this.nextT = c.currentTime + 0.05;
+    while (this.nextT < c.currentTime + 0.3) {
+      this.scheduleBeat(this.beat, this.nextT);
+      this.beat = (this.beat + 1) % 32;
+      if (this.beat === 0) this.loop = (this.loop || 0) + 1;
+      this.nextT += 60 / 80;
+    }
+  }
+  musicStart() {
+    if (!this.state.music || !this.initAudio()) return;
+    const c = this.ctx;
+    try { c.resume(); } catch (e) {}
+    if (!this.musicLive) {
+      this.musicLive = true;
+      this.beat = 0;
+      this.loop = 0;
+      this.nextT = c.currentTime + 0.1;
+      this.master.gain.cancelScheduledValues(c.currentTime);
+      this.master.gain.setValueAtTime(0.0001, c.currentTime);
+      this.master.gain.exponentialRampToValueAtTime(0.55, c.currentTime + 1.5);
+    }
+  }
+  musicStop(fade) {
+    if (!this.ctx) return;
+    const c = this.ctx;
+    this.musicLive = false;
+    const now = c.currentTime;
+    this.master.gain.cancelScheduledValues(now);
+    this.master.gain.setValueAtTime(Math.max(this.master.gain.value, 0.0001), now);
+    this.master.gain.exponentialRampToValueAtTime(0.0001, now + (fade || 0.3));
+  }
+  musicPause() { if (this.ctx) { try { this.ctx.suspend(); } catch (e) {} } }
+  musicResume() { if (this.ctx && this.state.music) { try { this.ctx.resume(); } catch (e) {} } }
+
+  componentDidMount() {
+    this.iv = setInterval(() => this.tick(), 200);
+    this.au = setInterval(() => this.schedule(), 60);
+  }
+  componentWillUnmount() {
+    clearInterval(this.iv); clearInterval(this.au); clearTimeout(this.to);
+    if (this.ctx) { try { this.ctx.close(); } catch (e) {} }
+  }
+  tick() {
+    const s = this.state;
+    if (!s.playing || s.scene < 0) return;
+    const d = this.durs();
+    const el = s.el + 200;
+    if (el >= d[s.scene]) {
+      if (s.scene < d.length - 1) this.setState({ scene: s.scene + 1, el: 0 });
+      else { this.setState({ el: d[s.scene], playing: false, ended: true }); this.musicStop(3); }
+    } else {
+      this.setState({ el: el });
+    }
+  }
+  go(i) {
+    clearTimeout(this.to);
+    this.musicStart();
+    this.musicResume();
+    this.setState({ scene: -1, el: 0 });
+    this.to = setTimeout(() => this.setState({ scene: i, el: 0, started: true, playing: true, ended: false }), 40);
+  }
+  fmt(ms) {
+    const t = Math.floor(ms / 1000);
+    const m = Math.floor(t / 60);
+    const sec = t % 60;
+    return m + ':' + (sec < 10 ? '0' : '') + sec;
+  }
+  renderVals() {
+    const s = this.state;
+    const d = this.durs();
+    const total = d.reduce((a, b) => a + b, 0);
+    const cur = s.scene < 0 ? 0 : s.scene;
+    let done = 0;
+    for (let i = 0; i < cur; i++) done += d[i];
+    done += s.scene < 0 ? 0 : s.el;
+    const vis = s.started ? s.scene : -2;
+    const chapters = this.labels().map((label, i) => ({
+      label: label,
+      cls: s.started && i === cur ? 'on' : (s.started && i < cur ? 'done' : ''),
+      go: () => this.go(i)
+    }));
+    return {
+      s0: vis === 0, s1: vis === 1, s2: vis === 2, s3: vis === 3, s4: vis === 4,
+      s5: vis === 5, s6: vis === 6, s7: vis === 7, s8: vis === 8, s9: vis === 9,
+      showCover: !s.started,
+      showTicket: s.started && s.scene >= 5 && s.scene <= 8,
+      pauseCls: s.playing ? '' : 'paused',
+      isPlaying: s.playing,
+      notPlaying: !s.playing,
+      playLabel: s.playing ? 'Pause' : (s.ended ? 'Replay' : 'Play'),
+      progressW: (Math.min(1, done / total) * 100).toFixed(2) + '%',
+      timeLabel: this.fmt(done) + ' / ' + this.fmt(total),
+      chapters: chapters,
+      steps: [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({ n: n, on: s.started && s.scene >= 0 && [0, 1, 2, 2, 3, 4, 5, 6, 7, 8][s.scene] === n })),
+      showSubs: s.subsOn && s.started,
+      subs: (() => {
+        const L = s.scene >= 0 ? this.subLines()[s.scene] : [];
+        let act = -1;
+        L.forEach((c, i) => { if (s.el >= c[0]) act = i; });
+        return L.map((c, i) => ({ text: c[1], on: i === act }));
+      })(),
+      subsOn: s.subsOn,
+      subsLabel: s.subsOn ? 'Hide captions' : 'Show captions',
+      subsColor: s.subsOn ? '#8FD16F' : '#A9B8CC',
+      toggleSubs: () => this.setState({ subsOn: !this.state.subsOn }),
+      musicOn: s.music,
+      musicOff: !s.music,
+      musicLabel: s.music ? 'Music on' : 'Music off',
+      toggleMusic: () => {
+        const on = !this.state.music;
+        this.setState({ music: on }, () => {
+          if (!on) this.musicStop(0.6);
+          else if (this.state.playing) this.musicStart();
+        });
+      },
+      togglePlay: () => {
+        if (!this.state.started || this.state.ended) this.go(0);
+        else {
+          const playing = !this.state.playing;
+          if (playing) this.musicResume(); else this.musicPause();
+          this.setState({ playing: playing });
+        }
+      },
+      replay: () => this.go(0),
+      prev: () => this.go(Math.max(0, cur - 1)),
+      next: () => this.go(Math.min(d.length - 1, cur + 1))
+    };
+  }
+}
+
+
+Player.prototype.setState = function (obj, cb) { Object.assign(this.state, obj); this.render(); if (cb) cb(); };
+Player.prototype.render = function () {
+  const v = this.renderVals();
+  const $ = (id) => document.getElementById(id);
+  const s = this.state;
+  const vis = s.started ? s.scene : -2;
+  if (vis !== this._vis) {
+    this._vis = vis;
+    const tpl = $('scene-' + vis);
+    $('sceneHost').innerHTML = tpl ? tpl.innerHTML : '';
+  }
+  $('stage').classList.toggle('paused', !s.playing);
+  $('cover').hidden = !v.showCover;
+  $('ticket').hidden = !v.showTicket;
+  const st = v.steps.find((x) => x.on);
+  const stn = st ? st.n : 0;
+  if (stn !== this._step) { this._step = stn; $('steps').innerHTML = stn ? STEP_HTML.split('{{st.n}}').join(String(stn)) : ''; }
+  const sb = v.showSubs ? v.subs.find((x) => x.on) : null;
+  const key = sb ? s.scene + '|' + sb.text : '';
+  if (key !== this._sub) {
+    this._sub = key;
+    $('subs').innerHTML = '';
+    if (sb) { const d = document.createElement('div'); d.innerHTML = SUB_OPEN + '</div>'; d.firstChild.textContent = sb.text; $('subs').appendChild(d.firstChild); }
+  }
+  $('prog').style.width = v.progressW;
+  $('timeLabel').textContent = v.timeLabel;
+  $('playLabel').textContent = v.playLabel;
+  $('playBtn').setAttribute('aria-label', v.playLabel);
+  $('icoPause').hidden = !v.isPlaying; $('icoPlay').hidden = v.isPlaying;
+  $('musicLabel').textContent = v.musicLabel; $('musicBtn').setAttribute('aria-label', v.musicLabel); $('musicBtn').setAttribute('aria-pressed', String(v.musicOn));
+  $('icoMusicOn').hidden = !v.musicOn; $('icoMusicOff').hidden = v.musicOn;
+  $('subsBtn').setAttribute('aria-label', v.subsLabel); $('subsBtn').setAttribute('aria-pressed', String(v.subsOn)); $('subsIcon').setAttribute('stroke', v.subsColor);
+  const ck = v.chapters.map((c) => c.cls).join(',');
+  if (ck !== this._chips) {
+    this._chips = ck;
+    const host = $('chapters'); host.innerHTML = '';
+    v.chapters.forEach((c, i) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'chip ' + c.cls; b.textContent = c.label;
+      b.addEventListener('click', () => this.go(i)); host.appendChild(b);
+    });
+  }
+};
+const P = new Player();
+const call = (k) => () => P.renderVals()[k]();
+document.getElementById('coverPlay').addEventListener('click', call('togglePlay'));
+document.getElementById('playBtn').addEventListener('click', call('togglePlay'));
+document.getElementById('replayBtn').addEventListener('click', call('replay'));
+document.getElementById('prevBtn').addEventListener('click', call('prev'));
+document.getElementById('nextBtn').addEventListener('click', call('next'));
+document.getElementById('musicBtn').addEventListener('click', call('toggleMusic'));
+document.getElementById('subsBtn').addEventListener('click', call('toggleSubs'));
+P.render();
+P.componentDidMount();
+
+</script>
+</body>
+</html>
