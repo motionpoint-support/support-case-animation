@@ -489,8 +489,9 @@ Most common · most direct</div>
 <li><strong>WARNING:</strong> Do not close cases without customer approval.</li>
 </ul>
 </div>
-<div class="disp" style="margin: 16px 28px 0; font-size: 20px; font-weight: 600; color: #0B2545; animation: up 1.24s 20.87s both;">First thing to check on any case: account Warnings.</div>
-<div style="margin: 18px 28px 0; display: flex; gap: 10px;">
+<div class="disp" style="margin: 12px 28px 0; font-size: 20px; font-weight: 600; color: #0B2545; animation: up 1.24s 20.87s both;">First thing to check on any case: account Warnings.</div>
+<div style="margin: 10px 28px 0; height: 40px; border-radius: 6px; background: #DD7A01; color: #FFFFFF; display: flex; align-items: center; gap: 10px; padding: 0 14px; font-size: 15px; font-weight: 700; animation: fromL 1s 24.5s both, warnPulse 3.23s 25.5s 2;"><span style="font-size: 18px;">&#9888;</span>This case may be a part of a project&rsquo;s UAT phase.<span style="margin-left: auto; padding: 3px 10px; border-radius: 10px; background: #FFFFFF; color: #C2410C; font-size: 13px; font-weight: 900; animation: pop .6s 29s both;">UAT? Route, don&rsquo;t fix</span></div>
+<div style="margin: 12px 28px 0; display: flex; gap: 10px;">
 <div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Case Information</div>
 <div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Customer Information</div>
 <div style="flex-grow: 1; height: 36px; border-radius: 8px; background: #F1F4F9; font-size: 14px; color: #3B4F6B; font-weight: 700; display: flex; align-items: center; padding: 0 12px;">Description</div>
@@ -897,14 +898,14 @@ class Player {
     this.state = { scene: 0, el: 0, playing: false, started: false, ended: false, music: true, subsOn: true };
     this.ctx = null;
   }
-  durs() { return [14000, 37500, 21200, 26200, 32400, 39200, 25200, 25200, 28500, 37500]; }
+  durs() { return [14000, 37500, 21200, 26200, 41400, 39200, 25200, 25200, 28500, 37500]; }
   subLines() {
     return [
       [[0, "Here's how a Support case begins."]],
       [[0, 'A customer spots an issue on their translated site.'], [3749, "Text that isn't translated."], [7264, 'A misaligned layout.'], [13358, 'A broken image or link…'], [19451, "…or a button that won't work."], [25546, 'Or they need help with an offline document translation, SSL Certificate installation, or a CSR generation.'], [32343, 'Either way, they need MotionPoint Support.']],
       [[0, 'They can email Support, or call us.'], [6379, 'But the most common, and most direct way, is to create a case in the portal, MP+.']],
       [[0, 'In the MP+ case portal, they choose Create a Support Case,'], [6526, 'pick Web Localization,'], [10792, 'fill in the form,'], [21587, 'and click Create Case.']],
-      [[0, 'The case gets its own number,'], [3975, 'and travels from MP+ into our Support Salesforce case management system.'], [17889, 'The first thing to check for any case: any account warnings.']],
+      [[0, 'The case gets its own number,'], [3975, 'and travels from MP+ into our Support Salesforce case management system.'], [17889, 'The first thing to check for any case: any account warnings.'], [24500, 'Then, look for an orange UAT banner. It means the case may be part of a project\'s UAT phase.'], [30500, 'If you see it, don\'t troubleshoot or bill: complete the milestone, post a customer note, and assign it to the team in the MPD email.']],
       [[0, 'Support reviews the Case Information: the case number, priorities, start and due dates,'], [21200, 'the type, the status, and the language the customer selected.'], [33200, 'The Original Case Owner is usually the SU team member who will work the case.']],
       [[0, 'Customer Information shows who the customer is, which project is involved,'], [10894, 'and what level of service applies — such as Beyond Words 24/7, or Standard.']],
       [[0, 'The Description explains what the customer needs.'], [5827, 'Details, steps to reproduce, URLs, credentials when required, and any other instructions.']],
